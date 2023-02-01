@@ -1,0 +1,44 @@
+{% extends 'base.html.twig' %}
+
+
+
+
+{% block body %}
+    <div class="form-group">
+        {{ form_start(form) }}
+            <label for="what" class="form-label">Quoi ?</label>
+            {{ form_widget(form.what, {'attr' : {'class' : 'form-control'} } ) }}
+            {{ form_errors(form.what) }}
+
+            <label for="where" class="form-label">Où ?</label>
+            {{ form_widget(form.where, {'attr' : {'class' : 'form-control'} } ) }}
+            {{ form_errors(form.where) }}
+
+            {{ form_widget(form.submit) }}
+        {{ form_end(form) }}
+    </div>
+
+    <div class="mt-4">
+        <h1 class="mb-4">Trouvez votre job idéal !</h1>
+
+        {{ totalJobs }} job(s) trouvé(s) !
+
+        {% for job in jobs %}
+            <div class="card mb-3">
+                <div class="card-body">
+                    <div class="card-title">
+                        <h2>{{ job.title }}</h2>
+                        <span>{{ job.city }}</span><i> ({{ job.department }})</i></span>
+                    </div>
+                    <p class="card-text">{{ job.description }}</p>
+                </div>
+            </div>
+        {% endfor %}
+
+        {# display navigation #}
+        <div class="navigation">
+            {{ knp_pagination_render(pagination) }}
+        </div>
+    </div>
+
+{% endblock %}

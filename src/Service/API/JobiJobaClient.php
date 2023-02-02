@@ -2,12 +2,16 @@
 
 namespace App\Service\API;
 
-use App\Service\JobSearch;
+use App\Model\API\JobiJobaQuery;
+use App\Model\API\JobiJobaResponse;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
-use function Symfony\Component\DependencyInjection\Loader\Configurator\env;
+use Symfony\Contracts\HttpClient\ResponseInterface;
 
 class JobiJobaClient
 {
@@ -55,7 +59,7 @@ class JobiJobaClient
                 ])
             ]);
 
-            if ( $body = $this->handleResponse($response) ) {
+            if ( $body = $this->handleResponse( $response ) ) {
                 $this->token = $body->token;
             }
         }
@@ -63,9 +67,16 @@ class JobiJobaClient
         return $this->token;
     }
 
-    private function handleResponse( $response ) {
+    /**
+     * @param ResponseInterface $response
+     * @return mixed|null
+     * @throws TransportExceptionInterface
+     * @throws ClientExceptionInterface
+     * @throws RedirectionExceptionInterface
+     * @throws ServerExceptionInterface
+     */
+    private function handleResponse( ResponseInterface $response ) {
 
-        //dump($response->getStatusCode());
         if ( $response->getStatusCode() === Response::HTTP_OK ) {
             return json_decode($response->getContent());
         }
@@ -74,23 +85,29 @@ class JobiJobaClient
 
 
     /**
+     * @param JobiJobaQuery $jobiJobaQuery
+     * @return JobiJobaResponse|null
+     * @throws ClientExceptionInterface
+     * @throws RedirectionExceptionInterface
+     * @throws ServerExceptionInterface
      * @throws TransportExceptionInterface
      */
-    public function jobSearch( $params ) {
+    public function jobSearch( JobiJobaQuery $jobiJobaQuery ): ?JobiJobaResponse
+    {
         $response = $this->client->request('GET', $this->getBasicUrl() . '/ads/search', [
             'headers' => [
                 'Authorization: Bearer '. $this->getAuthToken()
             ],
             'query' => [
-                JobSearch::PARAM_WHAT => $params[JobSearch::PARAM_WHAT],
-                JobSearch::PARAM_WHERE => $params[JobSearch::PARAM_WHERE],
-                JobSearch::PARAM_PAGE => $params[JobSearch::PARAM_PAGE] ?: self::DEFAULT_PAGE,
-                JobSearch::PARAM_LIMIT => $params[JobSearch::PARAM_LIMIT] ?: self::DEFAULT_LIMIT
+                JobiJobaQuery::PARAM_WHAT => $jobiJobaQuery->getWhat(),
+                JobiJobaQuery::PARAM_WHERE => $jobiJobaQuery->getWhere(),
+                JobiJobaQuery::PARAM_PAGE => $jobiJobaQuery->getPage(),
+                JobiJobaQuery::PARAM_LIMIT => $jobiJobaQuery->getLimit()
             ]
         ]);
 
         if ( $body = $this->handleResponse($response) ) {
-            return $body->data;
+            return new JobiJobaResponse( $body->data );
         }
         return null;
     }

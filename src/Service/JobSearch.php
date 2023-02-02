@@ -2,121 +2,48 @@
 
 namespace App\Service;
 
+use App\Model\API\JobiJobaQuery;
+use App\Model\API\JobiJobaResponse;
 use App\Service\API\JobiJobaClient;
+use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 
 class JobSearch
 {
-
-    const PARAM_WHAT = 'what';
-    const PARAM_WHERE = 'where';
-    const PARAM_LIMIT = 'limit';
-    const PARAM_PAGE = 'page';
-
 
     /**
      * @var JobiJobaClient
      */
     private $client;
+    /**
+     * @var JobiJobaQuery
+     */
+    private $query;
 
     public function __construct( JobiJobaClient $jobiJobaClient ) {
         $this->client = $jobiJobaClient;
     }
 
-    private $country;
-
     /**
-     * @return mixed
+     * @return JobiJobaResponse|null
+     * @throws TransportExceptionInterface
+     * @throws ClientExceptionInterface
+     * @throws RedirectionExceptionInterface
+     * @throws ServerExceptionInterface
      */
-    public function getCountry()
+    public function search(): ?JobiJobaResponse
     {
-        return $this->country;
+        return $this->client->jobSearch( $this->query );
     }
 
     /**
-     * @param mixed $country
+     * @param JobiJobaQuery $jobiJobaQuery
+     * @return void
      */
-    public function setCountry($country): void
+    public function setQuery( JobiJobaQuery $jobiJobaQuery )
     {
-        $this->country = $country;
-    }
-
-    private $what;
-
-    /**
-     * @return mixed
-     */
-    public function getWhat()
-    {
-        return $this->what;
-    }
-
-    /**
-     * @param mixed $what
-     */
-    public function setWhat($what): void
-    {
-        $this->what = $what;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getWhere()
-    {
-        return $this->where;
-    }
-
-    /**
-     * @param mixed $where
-     */
-    public function setWhere($where): void
-    {
-        $this->where = $where;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getPage()
-    {
-        return $this->page;
-    }
-
-    /**
-     * @param mixed $page
-     */
-    public function setPage($page): void
-    {
-        $this->page = $page;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getLimit()
-    {
-        return $this->limit;
-    }
-
-    /**
-     * @param mixed $limit
-     */
-    public function setLimit($limit): void
-    {
-        $this->limit = $limit;
-    }
-    private $where;
-    private $page;
-    private $limit;
-
-    public function search() {
-        return $this->client->jobSearch(
-            [
-                self::PARAM_WHAT => $this->what,
-                self::PARAM_WHERE => $this->where,
-                self::PARAM_LIMIT => $this->limit,
-                self::PARAM_PAGE => $this->page
-            ]
-        );
+        $this->query = $jobiJobaQuery;
     }
 }

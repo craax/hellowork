@@ -1,22 +1,68 @@
 // customize some Bootstrap variables
-$primary: darken(#428bca, 20%);
+$primary: #006d77;
 
 // the ~ allows you to reference things in node_modules
 @import "~bootstrap/scss/bootstrap";
+@import url('https://fonts.googleapis.com/css2?family=Merriweather:wght@700');
 
-.job-item {
+.card {
 
-  border-radius: 4px;
-  background: #fff;
-  box-shadow: 0 6px 10px rgba(0,0,0,.08), 0 0 6px rgba(0,0,0,.05);
-  transition: .3s transform cubic-bezier(.155,1.105,.295,1.12),.3s box-shadow,.3s -webkit-transform cubic-bezier(.155,1.105,.295,1.12);
-  padding: 14px 80px 18px 36px;
-  cursor: pointer;
+  background-color: lighten(#83c5be, 20%);
 
-  &:hover {
+  label {
+    color: #006d77;
+  }
+}
 
-    transform: scale(1.05);
-    box-shadow: 0 10px 20px rgba(0,0,0,.12), 0 4px 8px rgba(0,0,0,.06);
+h1 {
+  color: #006d77;
+  font-family: 'Merriweather', serif;
+
+  span {
+    background-color: #ffddd2;
+  }
+}
+
+.form-control {
+  border-color: $primary;
+}
+
+.job-wrapper {
+  display: grid;
+  grid-template-columns: repeat(2,1fr);
+  grid-gap: 3em;
+
+  @media (max-width: 992px) {
+    grid-template-columns: repeat(1,1fr);
+  }
+
+  .job-item {
+
+    border-radius: 10px;
+    box-shadow: 0 6px 10px rgba(0,0,0,.08), 0 0 6px rgba(0,0,0,.05);
+    transition: .3s transform cubic-bezier(.155,1.105,.295,1.12),.3s box-shadow,.3s -webkit-transform cubic-bezier(.155,1.105,.295,1.12);
+    cursor: pointer;
+    padding: 2em;
+    background-color:#edf6f9;
+
+    h2 {
+      color:$primary;
+    }
+
+    h3 {
+      color:#83c5be;
+    }
+
+    &:hover {
+
+      transform: scale(1.05);
+      box-shadow: 0 10px 20px rgba(0,0,0,.12), 0 4px 8px rgba(0,0,0,.06);
+
+    }
+
+    p {
+      opacity: 80%;
+    }
 
   }
 

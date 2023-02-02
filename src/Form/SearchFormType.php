@@ -37,7 +37,7 @@ class SearchFormType extends AbstractType
             ->add('submit', SubmitType::class, [
                 'label' => 'Rechercher',
                 'attr' => [
-                    'class' => 'btn btn-primary mt-4'
+                    'class' => 'btn btn-primary mt-4 btn-lg'
                 ]
             ])
             ->setMethod('GET');

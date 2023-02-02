@@ -22,6 +22,9 @@ class JobSearch
      */
     private $query;
 
+    /**
+     * @param JobiJobaClient $jobiJobaClient
+     */
     public function __construct( JobiJobaClient $jobiJobaClient ) {
         $this->client = $jobiJobaClient;
     }

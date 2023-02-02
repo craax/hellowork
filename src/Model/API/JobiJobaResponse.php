@@ -7,6 +7,9 @@ class JobiJobaResponse
     private $total;
     private $ads;
 
+    /**
+     * @param $params
+     */
     public function __construct( $params )
     {
         $this->total = $params->total ?: 0;

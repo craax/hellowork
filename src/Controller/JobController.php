@@ -10,13 +10,23 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 
 class JobController extends AbstractController
 {
     /**
      * @Route("/job", name="app_job")
+     * @param Request $request
+     * @param JobSearch $jobSearch
+     * @param PaginatorInterface $paginator
+     * @return Response
      * @throws TransportExceptionInterface
+     * @throws ClientExceptionInterface
+     * @throws RedirectionExceptionInterface
+     * @throws ServerExceptionInterface
      */
     public function index(Request $request, JobSearch $jobSearch, PaginatorInterface $paginator): Response
     {

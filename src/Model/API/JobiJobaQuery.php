@@ -21,6 +21,9 @@ class JobiJobaQuery
     private $what;
     private $where;
 
+    /**
+     * @param array $params
+     */
     public function __construct( array $params ) {
 
         $this->what = array_key_exists('what', $params) ? $params['what'] : '';
